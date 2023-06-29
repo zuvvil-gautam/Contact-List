@@ -5,8 +5,21 @@ const port = 8000;
 
 const app = express();
 
+app.use(express.urlencoded());
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname,'views'));
+
+app.use(function (req, res, next) {
+    console.log('middleware 1 called');
+    next();
+});
+
+app.use(function(req,res,next){
+    console.log("middleware 2 called");
+    next();
+    
+})
 
 
 var contactList = [
@@ -22,22 +35,7 @@ var contactList = [
         name:'Gautam',
         phone:'345'
     },
-    {
-        name:'Zoro',
-        phone:'456'
-    },
-    {
-        name:'Chopper',
-        phone:'567'
-    },
-    {
-        name:'Nami',
-        phone:'678'
-    },
-    {
-        name:'Sanji',
-        phone:'789'
-    }
+    
 ]
 
 
@@ -48,10 +46,16 @@ app.get('/', function(req,res){
         contact_list:contactList
     });
 });
-
-app.get('/play', function(req,res){
+ 
+app.get('/practise', function(req,res){
 
     return res.render('practise', {title:"Playground"})
+})
+
+app.post('/contact', function(req,res){
+    console.log(req.body);
+    // contactList.push(req.body);
+    // res.redirect('/');
 })
 
 
