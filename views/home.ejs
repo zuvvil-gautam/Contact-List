@@ -3,21 +3,25 @@
         <title>
             <%= title %>
         </title>
+
+        <link rel="stylesheet" href="/css/home.css">
+        <!-- Font Awesome Css  -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css">
+
+       
+
+
+        
     </head>
     <body>
-        <h1>Contact List</h1>
 
-        <div>
-            <ul>
-                <% for (let i of contact_list) {  %>
-                    <li>
-                        <p><%= i.name %></p>
-                        <p><%= i.phone %></p>
-                    </li>
-                <% } %>
-            </ul>
-        </div>
+        <h1 class="ml6">
+        
+            <i class="fas fa-address-book"></i>&nbsp;Contact Bucket
+        
+        </h1>
 
+        
         <form action="/contact" method="POST">
             <input type="text" name="name" placeholder="Enter Name" required>
             <input type="number" name="phone" placeholder="Enter Phone" required>
@@ -25,5 +29,30 @@
             <button type="submit">Submit</button>
 
         </form>
+
+        <div class="list-container">
+            <ul>
+                <% for (let i of contact_list) { %>
+                    <li>
+                        <p>
+                            
+                            <%= i.name %>
+                        </p>
+                        <p>
+                            <%= i.phone %>
+                        </p>
+
+                        <div class="delete-button">
+                            <a href="/delete-contact/?phone=<%= i.phone%>&name=<%=i.name%>">
+                                <i class="fas fa-window-close"></i>
+                            </a>
+                        </div>
+                    </li>
+                    <% } %>
+            </ul>
+        </div>
+
+
+        <script type="text/javascript" src="/js/home.js"></script>
     </body>
 </html>

@@ -10,16 +10,19 @@ app.use(express.urlencoded());
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname,'views'));
 
-app.use(function (req, res, next) {
-    console.log('middleware 1 called');
-    next();
-});
+app.use(express.static('assets'));
 
-app.use(function(req,res,next){
-    console.log("middleware 2 called");
-    next();
+
+// app.use(function (req, res, next) {
+//     console.log('middleware 1 called');
+//     next();
+// });
+
+// app.use(function(req,res,next){
+//     console.log("middleware 2 called");
+//     next();
     
-})
+// })
 
 
 var contactList = [
@@ -50,13 +53,29 @@ app.get('/', function(req,res){
 app.get('/practise', function(req,res){
 
     return res.render('practise', {title:"Playground"})
-})
+});
 
 app.post('/contact', function(req,res){
-    console.log(req.body);
-    // contactList.push(req.body);
-    // res.redirect('/');
-})
+    contactList.push(req.body);
+    res.redirect('/');
+});
+
+//for deleting a contact
+app.get('/delete-contact/',function(req,res){
+    //get the query from the url
+
+    //console.log(req.query);
+    let phone=req.query.phone;
+
+    let contactIndex = contactList.findIndex(contact => contact.phone == phone);
+
+    if(contactIndex != -1)
+        contactList.splice(contactIndex,1);
+
+    res.redirect('/');
+});
+
+
 
 
 app.listen(port, function(err){
