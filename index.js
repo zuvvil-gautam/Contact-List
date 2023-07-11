@@ -3,6 +3,10 @@ const path = require('path');
 
 const port = 8000;
 
+const db = require('./config/mongoose');
+
+const Contact = require('./models/contact');
+
 const app = express();
 
 app.use(express.urlencoded());
@@ -55,9 +59,18 @@ app.get('/practise', function(req,res){
     return res.render('practise', {title:"Playground"})
 });
 
-app.post('/contact', function(req,res){
-    contactList.push(req.body);
-    res.redirect('/');
+app.post('/contact', function (req, res) {
+    // contactList.push(req.body);
+
+    Contact.create(req.body)
+        .then(newContact => {
+            console.log('New contact created:', newContact);
+            res.redirect('/');
+        })
+        .catch(err => {
+            console.log('Error in creating contact:', err);
+            res.status(500).send('Error in creating contact');
+        });
 });
 
 //for deleting a contact
