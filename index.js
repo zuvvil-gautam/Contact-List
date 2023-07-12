@@ -48,10 +48,18 @@ var contactList = [
 
 app.get('/', function(req,res){
 
-    return res.render('home', {
-        title: "Contact List",
-        contact_list:contactList
-    });
+    Contact.find(req.body)
+        .then(contacts => {
+            console.log("Contacts fetched successfully");
+            res.render('home',{
+                title:'Contact list',
+                contact_list : contacts
+            }); 
+        })
+        .catch(err => {
+            console.log('error in fetching contact from database');
+            return ;
+        })
 });
  
 app.get('/practise', function(req,res){
@@ -75,17 +83,21 @@ app.post('/contact', function (req, res) {
 
 //for deleting a contact
 app.get('/delete-contact/',function(req,res){
-    //get the query from the url
+    //get the id from  query in the url
+     let id = req.query.id;
 
-    //console.log(req.query);
-    let phone=req.query.phone;
+     //find the contact in the database using id and delete
 
-    let contactIndex = contactList.findIndex(contact => contact.phone == phone);
+     Contact.findByIdAndDelete(id)
+     .then(id =>{
+        res.redirect('/');
 
-    if(contactIndex != -1)
-        contactList.splice(contactIndex,1);
-
-    res.redirect('/');
+    })
+     .catch(err =>{
+        console.log('error in deleting an object from database');
+        return ;
+        
+     });
 });
 
 
